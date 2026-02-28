@@ -7,8 +7,8 @@ import { pipeline, env } from '@huggingface/transformers'
 // Empêche de chercher les modèles en local (on les télécharge depuis HuggingFace)
 env.allowLocalModels = false
 
-type PipelineInstance = Awaited<ReturnType<typeof pipeline>>
-let transcriber: PipelineInstance | null = null
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let transcriber: any = null
 
 async function loadModel(modelId: string) {
   self.postMessage({ type: 'status', status: 'loading', message: 'Chargement du modèle Whisper...' })
