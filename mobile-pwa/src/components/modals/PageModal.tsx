@@ -38,9 +38,9 @@ export default function PageModal({
   const [tab, setTab]             = useState<'page' | 'practice'>('page')
   const [analyses, setAnalyses]   = useState<WordAnalysis[] | null>(null)
   const [score, setScore]         = useState<number | null>(null)
-  const [basePath]                = useState(
-    process.env.NODE_ENV === 'production' ? '/CoranBuilding' : ''
-  )
+  const [imgError, setImgError]   = useState(false)
+
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? ''
 
   useEffect(() => {
     setLoading(true)
@@ -119,12 +119,21 @@ export default function PageModal({
           <div className="flex flex-col gap-4 p-4">
             {/* Page image */}
             <div className="rounded-lg overflow-hidden border border-slate-700 bg-white">
-              <img
-                src={`${basePath}/quran_pages/Quran_Page_${String(pageNumber).padStart(3, '0')}.jpg`}
-                alt={`Page ${pageNumber} du Coran`}
-                className="w-full object-contain"
-                loading="lazy"
-              />
+              {!imgError ? (
+                <img
+                  src={`${basePath}/quran_pages/Quran_Page_${String(pageNumber).padStart(3, '0')}.jpg`}
+                  alt={`Page ${pageNumber} du Coran`}
+                  className="w-full object-contain"
+                  loading="lazy"
+                  onError={() => setImgError(true)}
+                />
+              ) : (
+                <div className="flex items-center justify-center h-48 bg-slate-100">
+                  <p className="text-slate-400 text-sm text-center px-4">
+                    Image non disponible pour la page {pageNumber}
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Arabic text */}

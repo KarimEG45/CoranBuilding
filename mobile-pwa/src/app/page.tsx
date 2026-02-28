@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react'
 import BuildingView from '@/components/building/BuildingView'
 import PageModal from '@/components/modals/PageModal'
-import { getProgress } from '@/lib/db'
+import WelcomeModal from '@/components/modals/WelcomeModal'
+import { getProgress, getSetting, setSetting } from '@/lib/db'
 import type { PageProgress, PageStatus, UserStats } from '@/types'
 
 export default function Home() {
@@ -11,10 +12,28 @@ export default function Home() {
   const [stats, setStats]       = useState<UserStats>({ mastered: 0, started: 0, revise: 0, total: 604, percentage: 0 })
   const [selectedPage, setSelectedPage] = useState<number | null>(null)
   const [loading, setLoading]   = useState(true)
+  const [userName, setUserName] = useState<string | null>(null)
+  const [showWelcome, setShowWelcome] = useState(false)
 
   useEffect(() => {
-    loadProgress()
+    initApp()
   }, [])
+
+  const initApp = async () => {
+    const name = await getSetting<string | null>('userName', null)
+    if (!name) {
+      setShowWelcome(true)
+    } else {
+      setUserName(name)
+    }
+    loadProgress()
+  }
+
+  const handleWelcomeConfirm = async (name: string) => {
+    await setSetting('userName', name)
+    setUserName(name)
+    setShowWelcome(false)
+  }
 
   const loadProgress = async () => {
     const data = await getProgress()
@@ -48,6 +67,10 @@ export default function Home() {
     })
   }
 
+  if (showWelcome) {
+    return <WelcomeModal onConfirm={handleWelcomeConfirm} />
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
 
@@ -57,7 +80,9 @@ export default function Home() {
           <div className="flex items-center justify-between">
             <h1 className="text-base font-bold text-white">
               مبنى القرآن
-              <span className="text-slate-500 text-xs font-normal ml-2">The Coran Building</span>
+              {userName && (
+                <span className="text-gold-400 text-xs font-normal ml-2">— {userName}</span>
+              )}
             </h1>
             <div className="flex items-center gap-1.5">
               <span className="text-gold-400 text-sm font-bold">{stats.percentage}%</span>
