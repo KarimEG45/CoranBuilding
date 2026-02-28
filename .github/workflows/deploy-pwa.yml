@@ -1,0 +1,64 @@
+name: Deploy Mobile PWA to GitHub Pages
+
+on:
+  push:
+    branches: [master, main]
+    paths:
+      - 'mobile-pwa/**'
+      - 'quran_pages/**'
+      - '.github/workflows/deploy-pwa.yml'
+  workflow_dispatch:  # Allows manual trigger from GitHub Actions UI
+
+permissions:
+  contents: write  # Needed to push to gh-pages branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    name: Build & Deploy PWA
+
+    steps:
+      # 1. Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: mobile-pwa/package-lock.json
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        working-directory: mobile-pwa
+        run: npm ci
+
+      # 4. Build Next.js static export
+      - name: Build PWA
+        working-directory: mobile-pwa
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      # 5. Copy Quran page images into the build output
+      - name: Copy Quran pages to build output
+        run: |
+          mkdir -p mobile-pwa/out/quran_pages
+          cp quran_pages/*.jpg mobile-pwa/out/quran_pages/
+          echo "✅ Copied $(ls quran_pages/*.jpg | wc -l) Quran page images"
+
+      # 6. Add .nojekyll so GitHub Pages serves all files correctly
+      - name: Add .nojekyll
+        run: touch mobile-pwa/out/.nojekyll
+
+      # 7. Deploy to gh-pages branch
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: mobile-pwa/out
+          publish_branch: gh-pages
+          commit_message: |
+            deploy: PWA build from ${{ github.sha }}

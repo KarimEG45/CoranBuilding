@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&display=swap');
+
+:root {
+  --gold: #e6b422;
+}
+
+html, body {
+  background-color: #0f172a;
+  color: #e2e8f0;
+  overscroll-behavior: none;
+}
+
+/* Safe area for iOS */
+.safe-area-inset {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Touch optimization */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.font-arabic {
+  font-family: 'Scheherazade New', 'Amiri', 'Traditional Arabic', serif;
+}
+
+/* Gold color utility */
+.text-gold-400 { color: #f5c842; }
+.text-gold-500 { color: #e6b422; }
+.bg-gold-400   { background-color: #f5c842; }
+.bg-gold-500   { background-color: #e6b422; }
+.border-gold-500 { border-color: #e6b422; }
+.border-gold-500\/50 { border-color: rgba(230, 180, 34, 0.5); }
