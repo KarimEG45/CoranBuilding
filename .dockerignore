@@ -1,0 +1,15 @@
+.venv
+__pycache__
+.vscode
+build/
+dist/
+*.spec
+.git
+.gitignore
+*.db
+recordings/
+quran_pages/
+memory_images/
+*.webm
+*.jpg
+*.png

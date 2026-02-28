@@ -1,0 +1,8 @@
+{
+    "source_directories": [
+        "."
+    ],
+    "site_package_search_strategy": "all",
+    "python_version": "3.14",
+    "python_platform": "win32"
+}

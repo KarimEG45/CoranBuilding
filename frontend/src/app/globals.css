@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;800&family=Amiri:wght@400;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  --background: #f6f7f8;
+  --foreground: #101c22;
+}
+
+@theme {
+  --color-primary: #1193d4;
+  --color-background-light: #f6f7f8;
+  --color-background-dark: #101c22;
+  --color-mastered: #10b981;
+  --color-revise: #f59e0b;
+  --color-locked: #334155;
+  --color-window-frame: #cbd5e1;
+
+  --font-display: 'Lexend', sans-serif;
+  --font-quran: 'Amiri', serif;
+
+  --animate-pulse-ring: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  --animate-pulse-dot: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite;
+
+  @keyframes pulse-ring {
+    0% {
+      transform: scale(0.33);
+    }
+
+    80%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes pulse-dot {
+    0% {
+      transform: scale(0.8);
+    }
+
+    50% {
+      transform: scale(1);
+    }
+
+    100% {
+      transform: scale(0.8);
+    }
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Lexend', sans-serif;
+}
+
+.font-quran {
+  font-family: 'Amiri', serif;
+}
+
+.dir-rtl {
+  direction: rtl;
+}
+
+/* Custom Utilities from Dashboard v3 */
+.bg-day-sky {
+  background-image: linear-gradient(to bottom, #38bdf8 0%, #bae6fd 100%);
+}
+
+.building-facade {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow:
+    -20px 0 30px -10px rgba(0, 0, 0, 0.1),
+    20px 0 30px -10px rgba(0, 0, 0, 0.1),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+.window-glass {
+  position: relative;
+  overflow: hidden;
+}
+
+.window-glass::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.1) 100%);
+  pointer-events: none;
+}
+
+.islamic-pattern {
+  background-color: transparent;
+  background-image: radial-gradient(circle at 2px 2px, rgba(17, 147, 212, 0.05) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+.floor-shadow {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.tower-perspective {
+  perspective: 1000px;
+}
