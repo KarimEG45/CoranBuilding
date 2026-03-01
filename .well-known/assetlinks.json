@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.github.karimeg45.coranbuilding",
+      "sha256_cert_fingerprints": [
+        "6F:98:D5:2F:A9:44:87:2F:CE:AF:08:C7:94:27:CA:D7:9C:0E:FE:ED:8B:B9:A6:BD:FD:15:F4:3F:77:3B:7E:54"
+      ]
+    }
+  }
+]
