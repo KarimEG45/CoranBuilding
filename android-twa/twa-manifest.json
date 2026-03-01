@@ -1,0 +1,46 @@
+{
+  "packageId": "io.github.karimeg45.coranbuilding",
+  "host": "karimeg45.github.io",
+  "name": "مبنى القرآن — The Coran Building",
+  "launcherName": "مبنى القرآن",
+  "display": "standalone",
+  "themeColor": "#1e3a5f",
+  "themeColorDark": "#0f172a",
+  "navigationColor": "#0f172a",
+  "navigationColorDark": "#0f172a",
+  "navigationDividerColor": "#1e3a5f",
+  "navigationDividerColorDark": "#1e3a5f",
+  "backgroundColor": "#0f172a",
+  "enableNotifications": false,
+  "startUrl": "/CoranBuilding/",
+  "iconUrl": "https://karimeg45.github.io/CoranBuilding/icons/icon.svg",
+  "maskableIconUrl": "https://karimeg45.github.io/CoranBuilding/icons/icon.svg",
+  "monochromeIconUrl": "https://karimeg45.github.io/CoranBuilding/icons/icon.svg",
+  "appVersion": "1.0.0",
+  "appVersionCode": 1,
+  "signingMode": "local",
+  "keystore": "./coran-building.keystore",
+  "keystorePassword": "CoranBuilding2024!",
+  "keyAlias": "coran-building",
+  "keyPassword": "CoranBuilding2024!",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://karimeg45.github.io/CoranBuilding/",
+  "minSdkVersion": 21,
+  "orientation": "portrait",
+  "fingerprints": [
+    {
+      "name": "coran-building",
+      "value": "6F:98:D5:2F:A9:44:87:2F:CE:AF:08:C7:94:27:CA:D7:9C:0E:FE:ED:8B:B9:A6:BD:FD:15:F4:3F:77:3B:7E:54"
+    }
+  ],
+  "webManifestUrl": "https://karimeg45.github.io/CoranBuilding/manifest.json",
+  "generatorApp": "bubblewrap-cli",
+  "sdkVersion": "33.0.0",
+  "shortcuts": []
+}

@@ -1,0 +1,65 @@
+name: Build Android TWA (APK)
+
+on:
+  workflow_dispatch:  # Déclenchement manuel depuis GitHub Actions
+  push:
+    branches: [master, main]
+    paths:
+      - 'android-twa/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build APK — مبنى القرآن
+
+    steps:
+      # 1. Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Java 17 (requis par Bubblewrap / Android SDK)
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # 3. Android SDK command-line tools
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      # 4. Install Bubblewrap
+      - name: Install Bubblewrap CLI
+        run: npm install -g @bubblewrap/cli
+
+      # 5. Pre-configure Bubblewrap (JDK + Android SDK paths, évite l'interaction)
+      - name: Configure Bubblewrap
+        run: |
+          mkdir -p ~/.bubblewrap
+          cat > ~/.bubblewrap/config.json << 'EOF'
+          {
+            "jdkPath": "${{ env.JAVA_HOME }}",
+            "androidSdkPath": "${{ env.ANDROID_SDK_ROOT }}"
+          }
+          EOF
+          echo "Bubblewrap config:"
+          cat ~/.bubblewrap/config.json
+
+      # 6. Build le TWA
+      - name: Build Android TWA
+        working-directory: android-twa
+        run: |
+          bubblewrap build --skipPwaValidation 2>&1
+
+      # 7. Upload APK + AAB comme artifacts téléchargeables
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coran-building-android
+          path: |
+            android-twa/app-release-signed.apk
+            android-twa/app-release-bundle.aab
+            android-twa/*.apk
+            android-twa/*.aab
+          if-no-files-found: warn
+          retention-days: 30
