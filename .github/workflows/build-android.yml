@@ -1,7 +1,7 @@
-name: Build Android TWA (APK)
+name: Build Android TWA (APK + AAB)
 
 on:
-  workflow_dispatch:  # Déclenchement manuel depuis GitHub Actions
+  workflow_dispatch:  # Manual trigger from GitHub Actions UI
   push:
     branches: [master, main]
     paths:
@@ -10,14 +10,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Build APK — مبنى القرآن
+    name: Build APK/AAB — مبنى القرآن
 
     steps:
       # 1. Checkout
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Java 17 (requis par Bubblewrap / Android SDK)
+      # 2. Java 17 (required by Android build tools)
       - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
@@ -28,38 +28,55 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      # 4. Install Bubblewrap
-      - name: Install Bubblewrap CLI
-        run: npm install -g @bubblewrap/cli
-
-      # 5. Pre-configure Bubblewrap (JDK + Android SDK paths, évite l'interaction)
-      - name: Configure Bubblewrap
+      # 4. Install required SDK platform + build tools
+      - name: Install Android SDK components
         run: |
-          mkdir -p ~/.bubblewrap
-          cat > ~/.bubblewrap/config.json << 'EOF'
-          {
-            "jdkPath": "${{ env.JAVA_HOME }}",
-            "androidSdkPath": "${{ env.ANDROID_SDK_ROOT }}"
-          }
-          EOF
-          echo "Bubblewrap config:"
-          cat ~/.bubblewrap/config.json
+          yes | sdkmanager --licenses > /dev/null 2>&1 || true
+          sdkmanager "platforms;android-34" "build-tools;34.0.0"
 
-      # 6. Build le TWA
-      - name: Build Android TWA
+      # 5. Setup Gradle 8.6 (no wrapper required)
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.6'
+
+      # 6. Decode keystore from GitHub Secret
+      - name: Decode keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android-twa/coran-building.keystore
+          ls -la android-twa/coran-building.keystore
+
+      # 7. Write local.properties (Android SDK path for Gradle)
+      - name: Create local.properties
         working-directory: android-twa
-        run: |
-          bubblewrap build --skipPwaValidation 2>&1
+        run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
 
-      # 7. Upload APK + AAB comme artifacts téléchargeables
+      # 8. Build APK + AAB (both release, signed via env vars)
+      - name: Build release APK
+        working-directory: android-twa
+        env:
+          KEYSTORE_PATH: ${{ github.workspace }}/android-twa/coran-building.keystore
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: gradle assembleRelease --stacktrace 2>&1
+
+      - name: Build release AAB (Play Store)
+        working-directory: android-twa
+        env:
+          KEYSTORE_PATH: ${{ github.workspace }}/android-twa/coran-building.keystore
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: gradle bundleRelease --stacktrace 2>&1
+
+      # 9. Upload artifacts
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: coran-building-android
           path: |
-            android-twa/app-release-signed.apk
-            android-twa/app-release-bundle.aab
-            android-twa/*.apk
-            android-twa/*.aab
+            android-twa/app/build/outputs/apk/release/*.apk
+            android-twa/app/build/outputs/bundle/release/*.aab
           if-no-files-found: warn
           retention-days: 30

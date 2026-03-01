@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Mosque / minaret silhouette icon for مبنى القرآن (The Coran Building)
+  Designed for 108×108dp adaptive icon foreground (safe zone: 72×72dp centered)
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Minaret shaft -->
+    <path
+        android:fillColor="#C4A44A"
+        android:pathData="M50,85 L58,85 L58,50 L50,50 Z" />
+
+    <!-- Minaret balcony -->
+    <path
+        android:fillColor="#C4A44A"
+        android:pathData="M46,52 L62,52 L62,47 L46,47 Z" />
+
+    <!-- Minaret upper section -->
+    <path
+        android:fillColor="#C4A44A"
+        android:pathData="M51,47 L57,47 L57,38 L51,38 Z" />
+
+    <!-- Minaret conical tip -->
+    <path
+        android:fillColor="#C4A44A"
+        android:pathData="M54,24 L47,38 L61,38 Z" />
+
+    <!-- Crescent moon atop minaret -->
+    <path
+        android:fillColor="#C4A44A"
+        android:pathData="
+          M54,14 C50,14 47,17 47,21 C47,25 50,28 54,28
+          C50.5,28 47.5,25.5 47.5,22 C47.5,18.5 50.5,16 54,16
+          C56.5,16 58.7,17.3 59.8,19.3
+          C59.2,16.2 56.8,14 54,14 Z" />
+
+    <!-- Dome base -->
+    <path
+        android:fillColor="#C4A44A"
+        android:pathData="M38,87 L70,87 L70,85 L38,85 Z" />
+
+    <!-- Dome -->
+    <path
+        android:fillColor="#C4A44A"
+        android:pathData="M38,85 Q38,68 54,68 Q70,68 70,85 Z" />
+
+    <!-- Mosque base -->
+    <path
+        android:fillColor="#C4A44A"
+        android:pathData="M33,92 L75,92 L75,87 L33,87 Z" />
+
+    <!-- Arch window in dome -->
+    <path
+        android:fillColor="#0f172a"
+        android:pathData="M50,84 Q50,77 54,77 Q58,77 58,84 Z" />
+
+</vector>
